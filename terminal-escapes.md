@@ -29,11 +29,7 @@ There are two main topics I'll cover:
 Most terminal emulators that you use
 (iTerm, alacritty, GNOME terminal, etc)
 are emulating old-school physical terminals
-like the VT100:
-
-```demo
-firefox --new-window https://en.wikipedia.org/wiki/VT100
-```
+like the [VT100](https://en.wikipedia.org/wiki/VT100)
 
 -------------------------------
 
@@ -165,12 +161,8 @@ man ioctl
 
 # BTUI
 
-I wrote a library called **BTUI**
-to do the bare minimum of this stuff:
-
-```demo
-firefox --new-window https://github.com/bruce-hill/btui
-```
+I wrote a library called [**BTUI**](https://github.com/bruce-hill/btui)
+to do the bare minimum of this stuff.
 
 (I really don't like ncurses, it's very bloated and unwieldy)
 
@@ -179,15 +171,12 @@ firefox --new-window https://github.com/bruce-hill/btui
 
 # slides
 
-This presentation is made using the BTUI library
-and its Python bindings.
+This presentation is made using a program I wrote
+called [slides](https://github.com/bruce-hill/slides) that uses
+the BTUI library and its Python bindings.
 
 Thanks to Michael Rees for the idea
 to make a terminal slide presenter!
-
-```demo
-firefox --new-window https://github.com/bruce-hill/slides
-```
 
 -------------------------------
 
