@@ -19,7 +19,7 @@ Well, it's not magic, and you can do it too!
 
 -------------------------------
 
-There are three main topics I'll cover:
+There are two main topics I'll cover:
 
 1. Printing terminal escape sequences
 2. Getting and setting terminal information
