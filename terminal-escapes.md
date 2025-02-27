@@ -62,7 +62,7 @@ teletype to the next line or back to the
 start of a line.
 
 ```demo
-term
+./term
 ```
 
 -------------------------------
@@ -92,7 +92,7 @@ but is a command that needs to run.
 Here are some fun operating system commands:
 
 ```demo
-ansi | less -R
+./ansi | less -R
 ```
 
 *You can run these yourself with just a print statement!*
@@ -102,7 +102,7 @@ ansi | less -R
 Here's what's actually getting sent to the terminal:
 
 ```demo
-ansi | less
+./ansi | less
 ```
 
 -------------------------------
@@ -200,6 +200,10 @@ I'm **Bruce Hill** if you want to find me on zulip.
 
 # Bonus Demo 1: Conway's Game of Life
 
+```
+https://bitbucket.org/spilt/conway
+```
+
 ```demo
 conway
 ```
@@ -207,6 +211,10 @@ conway
 -------------------------------
 
 # Bonus Demo 2: Double Pendulum
+
+```
+https://bitbucket.org/spilt/2pend
+```
 
 ```demo
 2pend
@@ -226,5 +234,5 @@ cd ~/software/btui/Python/invaders
 # Bonus Demo 4: Alternate Character Set
 
 ```demo
-alternate-character-set | less -r
+./alternate-character-set | less -r
 ```
