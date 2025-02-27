@@ -83,10 +83,6 @@ The magic **Operating System Command** is two bytes:
 
 Also known as `\x1B[` or `\e[`.
 
-```
-\033[
-```
-
 It tells the terminal that the next
 thing that follows isn't text to print
 but is a command that needs to run.

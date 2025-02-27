@@ -1,0 +1,63 @@
+#!/bin/sh
+# This file iterates through the ANSI text formatting codes and prints them
+
+for i in $(seq 40 47); do
+    if test $i = 47; then printf "\033[30m"; fi
+    printf "\033[${i}m\\\\033[${i}m\033[0m "
+done
+echo
+for i in $(seq 30 37); do
+    if test $i = 30; then printf "\033[47m"; fi
+    printf "\033[${i}m\\\\033[${i}m\033[0m "
+done
+echo
+for i in $(seq 30 37); do
+    if test $i = 30; then printf "\033[47m"; fi
+    printf "\033[1;${i}m\\\\033[${i}m\033[0m "
+done
+echo
+echo
+
+printf "\\\\033[38;5;255m   \033[38;5;76m[Set 256 FG]\033[0m    "
+printf "\\\\033[48;5;255m   \033[48;5;76m[Set 256 BG]\033[0m\n"
+
+printf "\\\\033[38;2;\033[31mR\033[0m;\033[32mG\033[0m;\033[34mB\033[0mm \033[38;2;150;150;250m[Set RGB FG]\033[0m    "
+printf "\\\\033[48;2;\033[31mR\033[0m;\033[32mG\033[0m;\033[34mB\033[0mm \033[48;2;150;150;250m[Set RGB BG]\033[0m\n"
+
+for i in $(seq 0 255); do
+    printf "\033[48;5;${i}m[${i}]"
+done
+printf "\033[0m\n"
+
+echo
+
+printf "\\\\033[0m \033[0m[Normal]\033[0m     "
+printf "\\\\033[1m \033[1m[Bold]\033[0m         "
+printf "\\\\033[2m \033[2m[Faint]\033[0m\n"
+printf "\\\\033[3m \033[3m[Italic]\033[0m     "
+printf "\\\\033[4m \033[4m[Underline]\033[0m    "
+printf "\\\\033[5m \033[5m[Blink slow]\033[0m\n"
+printf "\\\\033[6m \033[6m[Blink fast]\033[0m "
+printf "\\\\033[7m \033[7m[Reverse]\033[0m      "
+printf "\\\\033[8m \033[8m[Conceal]\033[0m\n"
+printf "\\\\033[9m \033[9m[Strikethrough]\033[0m "
+
+#printf "\\\\033[10m \033[10m[Primary font]\033[0m "
+#printf "\\\\033[11m \033[11m[1st Alt font]\033[0m "
+
+printf "\\\\033[20m \033[20m[Fraktur]\033[0m\n"
+printf "\\\\033[21m \033[21m[Double Underline]\033[0m\n"
+printf "\\\\033[22m [No \033[1mBold\033[22m/\033[2mFaint\033[22m]\033[0m\n"
+printf "\\\\033[23m [No \033[3mItalic\033[23m/\033[20mFraktur\033[23m]\033[0m\n"
+printf "\\\\033[24m [No \033[4mUnderlined\033[24m]\033[0m\n"
+printf "\\\\033[25m [No \033[5mBlink\033[25m]\033[0m\n"
+printf "\\\\033[27m [No \033[7mReverse\033[27m]\033[0m\n"
+printf "\\\\033[28m [No \033[8mConceal\033[28m]\033[0m\n"
+printf "\\\\033[29m [No \033[9mStrikethrough\033[29m]\033[0m\n"
+
+printf "\\\\033[39m \033[39m[Default FG]\033[0m\n"
+printf "\\\\033[49m \033[49m[Default BG]\033[0m\n"
+
+printf "\\\\033[51m \033[51m[Framed]\033[0m\n"
+printf "\\\\033[52m \033[52m[Encircled]\033[0m\n"
+printf "\\\\033[53m \033[53m[Overlined]\033[0m\n"
