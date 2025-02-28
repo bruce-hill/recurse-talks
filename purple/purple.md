@@ -2,11 +2,7 @@
 
 # Purple - what is it?
 
-![](purple-boys.jpg)
-
-```demo
-sxiv -sf purple-boys.jpg
-```
+![sxiv -f -sf](purple-boys.jpg)
 
 ---
 
@@ -14,11 +10,7 @@ sxiv -sf purple-boys.jpg
 
 Purple is a mix of red and blue light.
 
-![](retinal_cones.png)
-
-```demo
-sxiv -sf retinal_cones.png
-```
+![sxiv -f -sf](retinal_cones.png)
 
 Our eyes see it as violet.
 
