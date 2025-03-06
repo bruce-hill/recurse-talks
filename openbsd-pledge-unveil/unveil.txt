@@ -1,0 +1,81 @@
+UNVEIL(2)                     System Calls Manual                    UNVEIL(2)
+
+NNAAMMEE
+     uunnvveeiill - unveil parts of a restricted filesystem view
+
+SSYYNNOOPPSSIISS
+     ##iinncclluuddee <<uunniissttdd..hh>>
+
+     _i_n_t
+     uunnvveeiill(_c_o_n_s_t _c_h_a_r _*_p_a_t_h, _c_o_n_s_t _c_h_a_r _*_p_e_r_m_i_s_s_i_o_n_s);
+
+DDEESSCCRRIIPPTTIIOONN
+     The first call to uunnvveeiill() that specifies a _p_a_t_h removes visibility of
+     the entire filesystem from all other filesystem-related system calls
+     (such as open(2), chmod(2) and rename(2)), except for the specified _p_a_t_h
+     and _p_e_r_m_i_s_s_i_o_n_s.
+
+     The uunnvveeiill() system call remains capable of traversing to any _p_a_t_h in the
+     filesystem, so additional calls can set permissions at other points in
+     the filesystem hierarchy.
+
+     After establishing a collection of _p_a_t_h and _p_e_r_m_i_s_s_i_o_n_s rules, future
+     calls to uunnvveeiill() can be disabled by passing two NULL arguments.
+     Alternatively, pledge(2) may be used to remove the "unveil" promise.
+
+     The _p_e_r_m_i_s_s_i_o_n_s argument points to a string consisting of zero or more of
+     the following characters:
+
+           rr     Make _p_a_t_h available for read operations, corresponding to the
+                 pledge(2) promise "rpath".
+           ww     Make _p_a_t_h available for write operations, corresponding to
+                 the pledge(2) promise "wpath".
+           xx     Make _p_a_t_h available for execute operations, corresponding to
+                 the pledge(2) promise "exec".
+           cc     Allow _p_a_t_h to be created and removed, corresponding to the
+                 pledge(2) promise "cpath".
+
+     A _p_a_t_h that is a directory will enable all filesystem access underneath
+     _p_a_t_h using _p_e_r_m_i_s_s_i_o_n_s if and only if no more specific matching uunnvveeiill()
+     exists at a lower level.  Directories are remembered at the time of a
+     call to uunnvveeiill().  This means that a directory that is removed and
+     recreated after a call to uunnvveeiill() will appear to not exist.
+
+     Non-directory paths are remembered by name within their containing
+     directory, and so may be created, removed, or re-created after a call to
+     uunnvveeiill() and still appear to exist.
+
+     Attempts to access paths not allowed by uunnvveeiill() will result in an error
+     of EACCES when the _p_e_r_m_i_s_s_i_o_n_s argument does not match the attempted
+     operation.  ENOENT is returned for paths for which no uunnvveeiill()
+     permissions qualify.  After a process has terminated, lastcomm(1) will
+     mark it with the `U' flag if file access was prevented by uunnvveeiill().
+
+     uunnvveeiill() use can be tricky because programs misbehave badly when their
+     files unexpectedly disappear.  In many cases it is easier to unveil the
+     directories in which an application makes use of files.
+
+RREETTUURRNN VVAALLUUEESS
+     Upon successful completion, the value 0 is returned; otherwise the
+     value -1 is returned and the global variable _e_r_r_n_o is set to indicate the
+     error.
+
+EERRRROORRSS
+     [E2BIG]            The addition of _p_a_t_h would exceed the per-process
+                        limit for unveiled paths.
+
+     [EFAULT]           _p_a_t_h or _p_e_r_m_i_s_s_i_o_n_s points outside the process's
+                        allocated address space.
+
+     [ENOENT]           A directory in _p_a_t_h did not exist.
+
+     [EINVAL]           An invalid value of _p_e_r_m_i_s_s_i_o_n_s was used.
+
+     [EPERM]            An attempt to increase permissions was made, or the
+                        _p_a_t_h was not accessible, or uunnvveeiill() was called after
+                        locking.
+
+HHIISSTTOORRYY
+     The uunnvveeiill() system call first appeared in OpenBSD 6.4.
+
+OpenBSD 7.6                    September 6, 2021                   OpenBSD 7.6

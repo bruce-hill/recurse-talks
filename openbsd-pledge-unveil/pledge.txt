@@ -1,0 +1,300 @@
+PLEDGE(2)                     System Calls Manual                    PLEDGE(2)
+
+NNAAMMEE
+     pplleeddggee - restrict system operations
+
+SSYYNNOOPPSSIISS
+     ##iinncclluuddee <<uunniissttdd..hh>>
+
+     _i_n_t
+     pplleeddggee(_c_o_n_s_t _c_h_a_r _*_p_r_o_m_i_s_e_s, _c_o_n_s_t _c_h_a_r _*_e_x_e_c_p_r_o_m_i_s_e_s);
+
+DDEESSCCRRIIPPTTIIOONN
+     The pplleeddggee() system call forces the current process into a restricted-
+     service operating mode.  A few subsets are available, roughly described
+     as computation, memory management, read-write operations on file
+     descriptors, opening of files, networking (and notably separate, DNS
+     resolution).  In general, these modes were selected by studying the
+     operation of many programs using libc and other such interfaces, and
+     setting _p_r_o_m_i_s_e_s or _e_x_e_c_p_r_o_m_i_s_e_s.
+
+     Use of pplleeddggee() in an application will require at least some study and
+     understanding of the interfaces called.  Subsequent calls to pplleeddggee() can
+     reduce the abilities further, but abilities can never be regained.
+
+     A process which attempts a restricted operation is killed with an
+     uncatchable SIGABRT, delivering a core file if possible.  A process
+     currently running with pledge has state `p' in ps(1) output; a process
+     that was terminated due to a pledge violation is accounted by lastcomm(1)
+     with the `P' flag.
+
+     A _p_r_o_m_i_s_e_s value of "" restricts the process to the _exit(2) system call.
+     This can be used for pure computation operating on memory shared with
+     another process.
+
+     Passing NULL to _p_r_o_m_i_s_e_s or _e_x_e_c_p_r_o_m_i_s_e_s specifies to not change the
+     current value.
+
+     Some system calls, when allowed, have restrictions applied to them:
+
+           access(2):
+           May check for existence of _/_e_t_c_/_l_o_c_a_l_t_i_m_e.
+
+           adjtime(2):
+           Read-only, for ntpd(8).
+
+           chmod(2), fchmod(2), fchmodat(2), chown(2), lchown(2), fchown(2),
+           fchownat(2), mkfifo(2), and mknod(2):
+           Setuid/setgid/sticky bits are ignored.  The user or group cannot be
+           changed on a file.
+
+           ioctl(2):
+           Only the FIONREAD, FIONBIO, FIOCLEX, and FIONCLEX operations are
+           allowed by default.  Various ioctl requests are allowed against
+           specific file descriptors based upon the requests aauuddiioo, bbppff,
+           ddiisskkllaabbeell, ddrrmm, iinneett, ppff, rroouuttee, wwrroouuttee, ttaappee, ttttyy, vviiddeeoo, and vvmmmm.
+
+           mmap(2) and mprotect(2):
+           PROT_EXEC isn't allowed.
+
+           open(2):
+           May open _/_e_t_c_/_l_o_c_a_l_t_i_m_e and any files below _/_u_s_r_/_s_h_a_r_e_/_z_o_n_e_i_n_f_o.
+
+           profil(2):
+           Can only disable profiling.
+
+           pplleeddggee():
+           Can only reduce permissions for _p_r_o_m_i_s_e_s and _e_x_e_c_p_r_o_m_i_s_e_s.
+
+           sysctl(2):
+           A small set of read-only operations are allowed, sufficient to
+           support: getdomainname(3), gethostname(3), getifaddrs(3), uname(3),
+           and system sensor readings.
+
+     The _p_r_o_m_i_s_e_s argument is specified as a string, with space separated
+     keywords:
+
+           ssttddiioo      The following system calls are permitted.  sendto(2) is
+                      only permitted if its destination socket address is
+                      NULL.  As a result, all the expected functionalities of
+                      libc stdio work.
+
+                      clock_getres(2), clock_gettime(2), close(2),
+                      closefrom(2), dup(2), dup2(2), dup3(2), fchdir(2),
+                      fcntl(2), fstat(2), fsync(2), ftruncate(2),
+                      getdtablecount(2), getegid(2), getentropy(2),
+                      geteuid(2), getgid(2), getgroups(2), getitimer(2),
+                      getlogin(2), getpgid(2), getpgrp(2), getpid(2),
+                      getppid(2), getresgid(2), getresuid(2), getrlimit(2),
+                      getrtable(2), getsid(2), getthrid(2), gettimeofday(2),
+                      getuid(2), issetugid(2), kevent(2), kqueue(2),
+                      kqueue1(2), lseek(2), madvise(2), minherit(2), mmap(2),
+                      mprotect(2), mquery(2), munmap(2), nanosleep(2),
+                      pipe(2), pipe2(2), poll(2), pread(2), preadv(2),
+                      profil(2), pwrite(2), pwritev(2), read(2), readv(2),
+                      recvfrom(2), recvmsg(2), select(2), sendmsg(2),
+                      sendsyslog(2), sendto(2), setitimer(2), shutdown(2),
+                      sigaction(2), sigprocmask(2), sigreturn(2),
+                      socketpair(2), umask(2), wait4(2), waitid(2), write(2),
+                      writev(2)
+
+           rrppaatthh      A number of system calls are allowed if they only cause
+                      read-only effects on the filesystem, or expose filenames
+                      to programs:
+
+                      chdir(2), getcwd(3), getdents(2), openat(2), fstatat(2),
+                      faccessat(2), readlinkat(2), lstat(2), chmod(2),
+                      fchmod(2), fchmodat(2), chflags(2), chflagsat(2),
+                      chown(2), fchown(2), fchownat(2), fstat(2), getfsstat(2)
+
+           wwppaatthh      A number of system calls are allowed and may cause
+                      write-effects on the filesystem:
+
+                      getcwd(3), openat(2), fstatat(2), faccessat(2),
+                      readlinkat(2), lstat(2), chmod(2), fchmod(2),
+                      fchmodat(2), chflags(2), chflagsat(2), chown(2),
+                      fchown(2), fchownat(2), fstat(2)
+
+           ccppaatthh      A number of system calls and sub-modes are allowed,
+                      which may create new files or directories in the
+                      filesystem:
+
+                      rename(2), renameat(2), link(2), linkat(2), symlink(2),
+                      symlinkat(2), unlink(2), unlinkat(2), mkdir(2),
+                      mkdirat(2), rmdir(2)
+
+           ddppaatthh      A number of system calls are allowed to create special
+                      files:
+
+                      mkfifo(2), mknod(2)
+
+           ttmmppppaatthh    A number of system calls are allowed to do operations in
+                      the _/_t_m_p directory, including create, read, or write:
+
+                      lstat(2), chmod(2), chflags(2), chown(2), unlink(2),
+                      fstat(2)
+
+           iinneett       The following system calls are allowed to operate in the
+                      AF_INET and AF_INET6 domains (though setsockopt(2) has
+                      been substantially reduced in functionality):
+
+                      socket(2), listen(2), bind(2), connect(2), accept4(2),
+                      accept(2), getpeername(2), getsockname(2),
+                      setsockopt(2), getsockopt(2)
+
+           mmccaasstt      In combination with iinneett give back functionality to
+                      setsockopt(2) for operating on multicast sockets.
+
+           ffaattttrr      The following system calls are allowed to make explicit
+                      changes to fields in _s_t_r_u_c_t _s_t_a_t relating to a file:
+
+                      utimes(2), futimes(2), utimensat(2), futimens(2),
+                      chmod(2), fchmod(2), fchmodat(2), chflags(2),
+                      chflagsat(2), chown(2), fchownat(2), lchown(2),
+                      fchown(2), utimes(2)
+
+           cchhoowwnn      The chown(2) family is allowed to change the user or
+                      group on a file.
+
+           fflloocckk      File locking via fcntl(2), flock(2), lockf(3), and
+                      open(2) is allowed.  No distinction is made between
+                      shared and exclusive locks.  This promise is required
+                      for unlock as well as lock.
+
+           uunniixx       The following system calls are allowed to operate in the
+                      AF_UNIX domain:
+
+                      socket(2), listen(2), bind(2), connect(2), accept4(2),
+                      accept(2), getpeername(2), getsockname(2),
+                      setsockopt(2), getsockopt(2)
+
+           ddnnss        Subsequent to a successful open(2) of _/_e_t_c_/_r_e_s_o_l_v_._c_o_n_f,
+                      a few system calls become able to allow DNS network
+                      transactions:
+
+                      sendto(2), recvfrom(2), socket(2), connect(2)
+
+           ggeettppww      This allows read-only opening of files in _/_e_t_c for the
+                      getpwnam(3), getgrnam(3), getgrouplist(3), and
+                      initgroups(3) family of functions, including lookups via
+                      the yp(8) protocol for YP and LDAP databases.
+
+           sseennddffdd     Allows sending of file descriptors using sendmsg(2).
+                      File descriptors referring to directories may not be
+                      passed.
+
+           rreeccvvffdd     Allows receiving of file descriptors using recvmsg(2).
+                      File descriptors referring to directories may not be
+                      passed.
+
+           ttaappee       Allow MTIOCGET and MTIOCTOP operations against tape
+                      drives.
+
+           ttttyy        In addition to allowing read-write operations on
+                      _/_d_e_v_/_t_t_y, this opens up a variety of ioctl(2) requests
+                      used by tty devices.  If ttttyy is accompanied with rrppaatthh,
+                      revoke(2) is permitted.  Otherwise only the following
+                      ioctl(2) requests are permitted:
+
+                      TIOCSPGRP, TIOCGETA, TIOCGPGRP, TIOCGWINSZ, TIOCSWINSZ,
+                      TIOCSBRK, TIOCCDTR, TIOCSETA, TIOCSETAW, TIOCSETAF,
+                      TIOCUCNTL
+
+           pprroocc       Allows the following process relationship operations:
+
+                      fork(2), vfork(2), kill(2), getpriority(2),
+                      setpriority(2), setrlimit(2), setpgid(2), setsid(2)
+
+           eexxeecc       Allows a process to call execve(2).  Coupled with the
+                      pprroocc promise, this allows a process to fork and execute
+                      another program.  If _e_x_e_c_p_r_o_m_i_s_e_s has been previously
+                      set the new program begins with those promises, unless
+                      setuid/setgid bits are set in which case execution is
+                      blocked with EACCES.  Otherwise the new program starts
+                      running without pledge active, and hopefully makes a new
+                      pledge soon.
+
+           pprroott__eexxeecc  Allows the use of PROT_EXEC with mmap(2) and
+                      mprotect(2).
+
+           sseettttiimmee    Allows the setting of system time, via the
+                      settimeofday(2), adjtime(2), and adjfreq(2) system
+                      calls.
+
+           ppss         Allows enough sysctl(2) interfaces to allow inspection
+                      of processes operating on the system using programs like
+                      ps(1).
+
+           vvmmiinnffoo     Allows enough sysctl(2) interfaces to allow inspection
+                      of the system's virtual memory by programs like top(1)
+                      and vmstat(8).
+
+           iidd         Allows the following system calls which can change the
+                      rights of a process:
+
+                      setuid(2), seteuid(2), setreuid(2), setresuid(2),
+                      setgid(2), setegid(2), setregid(2), setresgid(2),
+                      setgroups(2), setlogin(2), setrlimit(2), getpriority(2),
+                      setpriority(2), setrtable(2)
+
+           ppff         Allows a subset of ioctl(2) operations on the pf(4)
+                      device:
+
+                      DIOCADDRULE, DIOCGETSTATUS, DIOCNATLOOK, DIOCRADDTABLES,
+                      DIOCRCLRADDRS, DIOCRCLRTABLES, DIOCRCLRTSTATS,
+                      DIOCRGETTSTATS, DIOCRSETADDRS, DIOCXBEGIN, DIOCXCOMMIT
+
+           rroouuttee      Allow inspection of the routing table.
+
+           wwrroouuttee     Allow changes to the routing table.
+
+           aauuddiioo      Allows a subset of ioctl(2) operations on audio(4)
+                      devices (see sio_open(3) for more information):
+
+                      AUDIO_GETPOS, AUDIO_GETPAR, AUDIO_SETPAR, AUDIO_START,
+                      AUDIO_STOP, AUDIO_MIXER_DEVINFO, AUDIO_MIXER_READ,
+                      AUDIO_MIXER_WRITE
+
+           vviiddeeoo      Allows a subset of ioctl(2) operations on video(4)
+                      devices:
+
+                      VIDIOC_DQBUF, VIDIOC_ENUM_FMT,
+                      VIDIOC_ENUM_FRAMEINTERVALS, VIDIOC_ENUM_FRAMESIZES,
+                      VIDIOC_G_CTRL, VIDIOC_G_PARM, VIDIOC_QBUF,
+                      VIDIOC_QUERYBUF, VIDIOC_QUERYCAP, VIDIOC_QUERYCTRL,
+                      VIDIOC_S_CTRL, VIDIOC_S_FMT, VIDIOC_S_PARM,
+                      VIDIOC_STREAMOFF, VIDIOC_STREAMON, VIDIOC_TRY_FMT,
+                      VIDIOC_REQBUFS
+
+           bbppff        Allow BIOCGSTATS operation for statistics collection
+                      from a bpf(4) device.
+
+           uunnvveeiill     Allow unveil(2) to be called.
+
+           eerrrroorr      Rather than killing the process upon violation, indicate
+                      error with ENOSYS.
+
+                      Also when pplleeddggee() is called with higher _p_r_o_m_i_s_e_s or
+                      _e_x_e_c_p_r_o_m_i_s_e_s, those changes will be ignored and return
+                      success.  This is useful when a parent enforces
+                      _e_x_e_c_p_r_o_m_i_s_e_s but an execve'd child has a different idea.
+
+RREETTUURRNN VVAALLUUEESS
+     Upon successful completion, the value 0 is returned; otherwise the
+     value -1 is returned and the global variable _e_r_r_n_o is set to indicate the
+     error.
+
+EERRRROORRSS
+     pplleeddggee() will fail if:
+
+     [EFAULT]           _p_r_o_m_i_s_e_s or _e_x_e_c_p_r_o_m_i_s_e_s points outside the process's
+                        allocated address space.
+
+     [EINVAL]           _p_r_o_m_i_s_e_s is malformed or contains invalid keywords.
+
+     [EPERM]            This process is attempting to increase permissions.
+
+HHIISSTTOORRYY
+     The pplleeddggee() system call first appeared in OpenBSD 5.9.
+
+OpenBSD 7.6                   September 17, 2024                   OpenBSD 7.6
