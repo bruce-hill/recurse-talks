@@ -108,3 +108,9 @@ After a month of playing, things got complicated:
 ## Materials
 Post-its or notecards, pens/pencils, tokens/coins
 for scorekeeping (not necessary, but helpful)
+
+-----------------------
+
+# The End
+
+You should play Nomic some time!
