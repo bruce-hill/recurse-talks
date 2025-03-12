@@ -1,0 +1,64 @@
+Immutable rules:
+I-1. Anything not forbidden by the rules is permitted.
+
+I-2. No rule set may be proposed which inflicts any
+     punishment on a player that is worse than losing
+     the game.
+
+I-3. If the game ends prematurely, the player with the
+     largest number of points wins. If multiple players
+     are tied for the largest number of points, the
+     winner is whoever among those players is next in
+     the turn order.
+
+I-4. If all players agree to end the game at any point, the
+     game ends.
+   
+Mutable rules:
+
+M-1. All players begin with 1 point. If a player has at
+     least 10 points more than any other player, they win
+     and the game ends.
+
+M-2. Any player who violates the rules loses the game. This
+     will be determined by Bruce (@spill).
+
+M-3. Players take turns in an order determined by using a
+     computer or Ghost Leg to randomly shuffle a list of the
+     players’ names. After the last player has taken their turn,
+     the turn order repeats.
+
+M-3. A player’s turn consists of one of the following:
+  A) The active player proposes a new set of immutable
+     rules. All players will vote on the new rules, and if the
+     players unanimously approve, the proposed immutable rules
+     will replace the existing immutable rules.
+
+  B) The active player proposes a new set of mutable rules,
+     then randomly chooses another player. The randomly chosen
+     player decides whether or not the proposed rules replace
+     the current rules.
+
+  C) The active player passes on their turn, and a randomly
+     chosen other player gains one point.
+
+M-4. Players are randomly chosen by issuing the Slack
+     command "/roll 1dN", where "N" is the number of players
+     minus one. Dicebot will respond with a number, "K", and the
+     chosen player is the Kth player in the turn order, excluding
+     the active player.
+
+M-5. Points are awarded by issuing the command "@username++"
+     and subtracted by issuing the command "@username—", where
+     "username" is the username of the person. The score can be
+     checked by issuing the command "@plusplus leaderboard".
+
+M-6. Points may only be awarded by one of the methods
+     outlined in rule M-3.
+
+M-7. The current set of rules will be kept in a
+     http://pastebin.com/ clipboard link referenced in the
+     channel topic. Rule proposals will consist of a link to a
+     new pastebin.com link with the desired rules. If and only if
+     the proposal is accepted, the topic will be changed to
+     include a link to the new rules and no other links.
