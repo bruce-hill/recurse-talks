@@ -6,6 +6,8 @@
 
 I'm Bruce and this is a talk about time.
 
+[Video](https://www.youtube.com/watch?v=vtkGtXtDlQA)
+
 --------------------------------
 
 # Time Is a Social Construct
