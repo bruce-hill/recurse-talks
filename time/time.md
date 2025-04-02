@@ -185,6 +185,8 @@ Every city ran on **local solar time.**
 Railroads hated it, so they pushed for the adoption
 of hour-bracketed **time zones.**
 
+Good idea, but don't even get me started...
+
 Synced up with **Greenwich Observatory** as the standard time.
 
 ---------------------------------
@@ -219,6 +221,8 @@ for not arriving at exactly the right time,
 but also factory owners cheating the clock.
 
 Workers forbidden from having their own watches.
+
+[Video](https://www.youtube.com/watch?v=hvk_XylEmLo)
 
 ---------------------------------
 
