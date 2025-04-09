@@ -163,6 +163,11 @@ A folk song about a hobo's utopia:
 
 # The Sixties
 
+![sxiv -sf -f](tobias.jpg)
+
+---
+
+# The Sixties
 - Americans never learn lessons
 - But what if **we** did it better?
 - Hippy movement *loved* communes
