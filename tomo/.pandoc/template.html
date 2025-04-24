@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="$lang$" xml:lang="$lang$"$if(dir)$ dir="$dir$"$endif$>
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  $for(author-meta)$
+  <meta name="author" content="$author-meta$">
+  $endfor$
+  $if(date-meta)$
+  <meta name="dcterms.date" content="$date-meta$">
+  $endif$
+  $if(keywords)$
+  <meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$">
+  $endif$
+  <meta property="og:locale" content="en_US">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tomo">
+  $if(url)$
+  <meta property="og:url" content="$root-url$$url$">
+  $endif$
+  <meta property="og:title" content="$pagetitle$">
+  <meta name="twitter:title" content="$pagetitle$">
+  $if(image)$
+  <meta property="og:image" content="$root-url$$image$">
+  <meta name="twitter:image" content="$root-url$$image$">
+  $endif$
+  $if(abstract)$
+  <meta property="og:description" content="$abstract$">
+  <meta name="twitter:description" content="$abstract$">
+  $endif$
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@spillybones">
+  $if(base)$
+  <base href="$base$" target="_self">
+  $endif$
+  <title>$pagetitle$$if(title-prefix)$ – $title-prefix$$endif$</title>
+  <style>
+  $styles.html()$
+  </style>
+  $for(css)$
+  <script src="/darkmode.js"></script>
+  <link rel="stylesheet" href="$css$" />
+  $endfor$
+  $if(math)$
+    $math$
+  $endif$
+  $for(header-includes)$
+    $header-includes$
+  $endfor$
+</head>
+<body>
+  <div class='navbar'>
+    <a href="/"><img class="top-logo" alt="Tomo logo" style="height:50px" src="/media/tomo-logo.png"/></a>
+    <ul class='navbar-links'>
+      <li><a class='navlink' href='/'>Overview</a></li>
+      <li><a class='navlink' href='/learn'>Learn</a></li>
+      <li><a class='navlink' href='/sandbox'>Try</a></li>
+      <li><a class='navlink' href='/api'>API</a></li>
+      <li><a class='navlink' href='https://code.bruce-hill.com/Bruce/tomo'>Code</a></li>
+    </ul>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+  </div>
+  </header>
+  $for(include-before)$
+  $include-before$
+  $endfor$
+  <div class="content">
+  $if(homepage)$
+  $else$
+  <article>
+  $endif$
+  $if(homepage)$
+  $else$
+  $if(image)$
+  <div class='featured-image-wrapper'>
+    <img class="featured-image" src="$image$" alt="$title$">
+  </div>
+  $endif$
+  $if(title)$
+  <h1 class="title">$title$</h1>
+  $endif$
+  $if(subtitle)$
+  <p class="subtitle">$subtitle$</p>
+  $endif$
+  $for(author)$
+  <p class="author">$author$</p>
+  $endfor$
+  $if(date)$
+  <p class="date">$date$</p>
+  $endif$
+  $endif$
+  $if(toc)$
+  <button id="toc-toggle">☰ Contents</button>
+  <nav id="$idprefix$TOC" role="doc-toc">
+  $if(toc-title)$
+  <h2 id="$idprefix$toc-title">$toc-title$</h2>
+  $endif$
+  $table-of-contents$
+  </nav>
+  $endif$
+  $abstract$
+  $body$
+  $if(homepage)$
+  $else$
+  </article>
+  $endif$
+  <div class="asidebar"></div>
+  </div>
+  <footer class="page-footer">
+  &copy; 2025 Bruce Hill
+  <br>
+  Unless otherwise specified, all code is released under the
+  <a href="/LICENSE.txt">MIT license with the Commons Clause</a>
+  </footer>
+  $if(toc)$
+  <script>
+    document.getElementById('toc-toggle').onclick = () => {
+      document.getElementById('TOC').classList.toggle('open');
+    };
+  $endif$
+  </script>
+  $for(include-after)$
+  $include-after$
+  $endfor$
+</body>
+</html>

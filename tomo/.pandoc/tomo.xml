@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd"
+[
+<!ENTITY HEX "[0-9A-Fa-f]">
+]>
+<language
+  name="tomo"
+  version="1"
+  kateversion="2.4"
+  section="Sources"
+  extensions="*.tm"
+  casesensitive="1"
+  identifier="python"
+  author="Bruce Hill (bruce@bruce-hill.com)"
+  license="MIT">
+  <highlighting>
+    <list name="keywords">
+      <item>func</item>
+      <item>struct</item>
+      <item>enum</item>
+      <item>lang</item>
+      <item>convert</item>
+      <item>assert</item>
+    </list>
+
+    <list name="types">
+      <item>Int</item>
+      <item>Int64</item>
+      <item>Int32</item>
+      <item>Int16</item>
+      <item>Int8</item>
+      <item>Num</item>
+      <item>Num32</item>
+      <item>Byte</item>
+      <item>Bool</item>
+      <item>Text</item>
+      <item>Void</item>
+    </list>
+
+    <list name="control">
+      <item>skip</item>
+      <item>stop</item>
+      <item>break</item>
+      <item>continue</item>
+      <item>when</item>
+      <item>is</item>
+      <item>if</item>
+      <item>then</item>
+      <item>else</item>
+      <item>while</item>
+      <item>repeat</item>
+      <item>for</item>
+      <item>in</item>
+      <item>return</item>
+      <item>pass</item>
+    </list>
+
+    <list name="specialvars">
+      <item>yes</item>
+      <item>no</item>
+    </list>
+
+    <list name="operators">
+      <item>mod</item>
+      <item>mod1</item>
+      <item>_min_</item>
+      <item>_max_</item>
+      <item>and</item>
+      <item>or</item>
+      <item>xor</item>
+    </list>
+
+    <list name="builtins">
+      <item>print</item>
+      <item>say</item>
+      <item>fail</item>
+      <item>exit</item>
+    </list>
+
+    <contexts>
+
+      <context name="Normal" attribute="Normal Text" lineEndContext="#pop">
+        <DetectChar attribute="Comment" context="Comment" char="#" />
+        <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Type" context="#stay" String="types" />
+        <keyword attribute="Control" context="#stay" String="control" />
+        <keyword attribute="Operator" context="#stay" String="operators" />
+        <AnyChar attribute="Operator" context="#stay" String=":[]().,=~+-*/%@&amp;|^&gt;&lt;;" />
+        <keyword attribute="Builtin" context="#stay" String="builtins" />
+        <keyword attribute="Special Variable" context="#stay" String="specialvars" />
+        <DetectChar attribute="String" context="SingleQuoteText" char="'" />
+        <DetectChar attribute="String" context="DoubleQuoteText" char="&quot;" />
+        <DetectChar attribute="String" context="BacktickText" char="`" />
+        <DetectChar attribute="Operator" context="Normal" char="(" />
+        <DetectChar attribute="Operator" context="#pop" char=")" />
+        <RegExpr attribute="Number" context="#stay" String="(?:0[xX](?:\.&HEX;+|&HEX;+\.?&HEX;*)(?:[pP][-+]?\d*)?|(?:\.\d+|\d+\.?\d*)(?:[eE][-+]?\d*)?)"/>
+      </context>
+
+      <context name="Comment" attribute="Comment" lineEndContext="#pop">
+      </context>
+
+      <context name="DoubleQuoteText" attribute="String" lineEndContext="#stay">
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+        <DetectChar attribute="Operator" char="$" context="Interpolation"/>
+      </context>
+
+      <context name="SingleQuoteText" attribute="String" lineEndContext="#stay">
+        <DetectChar attribute="String" context="#pop" char="'" />
+        <DetectChar attribute="Operator" char="$" context="Interpolation"/>
+      </context>
+
+      <context name="BacktickText" attribute="String" lineEndContext="#stay">
+        <DetectChar attribute="String" context="#pop" char="'" />
+      </context>
+
+      <context name="Interpolation" attribute="Normal Text" lineEndContext="#stay">
+        <DetectIdentifier attribute="Variable" context="#pop" />
+        <DetectChar attribute="Operator" char="(" context="#pop!Normal" />
+        <AnyChar lookAhead="true" context="#pop" />
+      </context>
+
+    </contexts>
+
+    <itemDatas>
+      <itemData name="Normal Text" defStyleNum="dsNormal" />
+      <itemData name="Comment" defStyleNum="dsComment" />
+      <itemData name="Variable" defStyleNum="dsVariable" />
+      <itemData name="Keyword" defStyleNum="dsKeyword" />
+      <itemData name="String" defStyleNum="dsString" />
+      <itemData name="Type" defStyleNum="dsDataType" />
+      <itemData name="Control" defStyleNum="dsControlFlow" />
+      <itemData name="Operator" defStyleNum="dsOperator" />
+      <itemData name="Builtin" defStyleNum="dsBuiltIn" />
+      <itemData name="Special Variable" defStyleNum="dsString" />
+      <itemData name="Number" defStyleNum="dsDecVal" />
+    </itemDatas>
+
+  </highlighting>
+  <general>
+    <comments>
+      <comment name="singleLine" start="#" />
+    </comments>
+    <keywords casesensitive="1"/>
+    <folding indentationsensitive="1"/>
+    <emptyLines>
+      <emptyLine regexpr="\s+"/>
+      <emptyLine regexpr="\s*#.*"/>
+    </emptyLines>
+  </general>
+</language>

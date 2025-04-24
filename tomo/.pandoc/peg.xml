@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="peg" version="1" kateversion="2.4" section="Sources" extensions="*.peg;*.PEG" author="Bruce Hill (bruce@bruce-hill.com)" license="MIT">
+  <highlighting>
+    <contexts>
+      <context attribute="Normal Text" lineEndContext="#pop" name="Normal Text" >
+        <DetectChar attribute="String" context="doublestring" char="&quot;" />
+        <DetectChar attribute="String" context="singlestring" char="'" />
+        <DetectChar attribute="String" context="range" char="[" />
+        <StringDetect attribute="Comment" context="LineComment" String="--"/>
+        <StringDetect context="#stay" attribute="Operator" String="&lt;-"/>
+        <StringDetect context="#stay" attribute="Operator" String="/"/>
+        <StringDetect context="#stay" attribute="Operator" String="+"/>
+        <StringDetect context="#stay" attribute="Operator" String="*"/>
+        <StringDetect context="#stay" attribute="Operator" String="!"/>
+        <StringDetect context="#stay" attribute="Operator" String="?"/>
+        <StringDetect context="#stay" attribute="Operator" String="&amp;"/>
+        <StringDetect context="#stay" attribute="SpecialOperator" String="."/>
+        <RegExpr context="#stay" attribute="EscapedChar" String="\\."/>
+        <RegExpr context="#stay" attribute="Annotation" String="\w+:"/>
+      </context>
+      <context attribute="String" lineEndContext="#stay" name="doublestring" >
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+      <context attribute="String" lineEndContext="#stay" name="singlestring" >
+        <DetectChar attribute="String" context="#pop" char="'" />
+      </context>
+      <context attribute="String" lineEndContext="#stay" name="range" >
+        <DetectChar attribute="String" context="#pop" char="]" />
+      </context>
+      <context attribute="String" lineEndContext="#stay" name="range" >
+        <DetectChar attribute="String" context="#pop" char="]" />
+      </context>
+      <context attribute="Comment" lineEndContext="#pop" name="LineComment">
+        <LineContinue attribute="Comment" context="#stay"/>
+        <IncludeRules context="##Alerts" />
+      </context>
+    </contexts>
+    <itemDatas>
+      <itemData name="Normal Text" defStyleNum="dsNormal" />
+      <itemData name="Keyword" defStyleNum="dsKeyword" />
+      <itemData name="String" defStyleNum="dsString" />
+      <itemData name="Operator" defStyleNum="dsOperator" />
+      <itemData name="SpecialOperator" defStyleNum="dsSpecialChar" />
+      <itemData name="EscapedChar" defStyleNum="dsChar" />
+      <itemData name="Annotation" defStyleNum="dsAnnotation" />
+      <itemData name="Comment" defStyleNum="dsComment" />
+    </itemDatas>
+  </highlighting>
+  <general>
+    <comments>
+      <comment name="singleLine" start="--" />
+    </comments>
+  </general>
+</language>
