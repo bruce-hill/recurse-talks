@@ -31,16 +31,39 @@ func main(n=99)
 
 - Not my first language ([nomsu.org](nomsu.org))
 - Making languages is fun!
-- Had a lot of free time in 2020-2022 for some reason
+- Had a lot of free time in 2020–2022 for some reason
 - Went through a lot of complete rewrites and redesigns
 
 Tomo grew out of my desire for a language that has the best
-of both words from C and Python:
+traits of the languages I like:
 
-- Fast and (comparatively) simple
-- But ergonomic
+- Fast and simple (low-level like C)
+- Ergonomic and readable (like Python)
+- Type safety without an elaborate type system (like Go)
 
-Plus some of the type safety of functional languages.
+I don't think there is such a thing as a perfect language,
+but I think there's room for a new balance of those values.
+
+---
+
+# Completely Made Up Graphs
+
+![](languages.png)
+
+---
+
+# Summing It Up
+
+Basically, Tomo is in the same ballpark as Go or C#—it's fast and compiled and
+has type safety and automatic memory management, but I think there are a lot of
+improvements over Go and C#:
+
+- Safer
+- More ergonomic
+- Faster compile times
+- More consistent semantics
+- Excellent Unicode support
+- Some neat built-in features
 
 ---
 
@@ -113,6 +136,30 @@ _Fast Arithmetic with Tagged Integers – A Plea for Hardware Support_
 You can opt into fixed-width integers like `Int64` if you
 need the performance, but the default is _correct_ and very
 fast for most cases.
+
+---
+
+# Text
+
+Tomo's built-in `Text` datatype solves some of the problems that other
+languages have with strings. I chose to call it `Text` instead of `String` to
+reflect the fact that these aren't your grandparents' "array of NUL-terminated
+ASCII bytes" (also, "text" is shorter and more vernacular than "string")
+
+Tomo Texts:
+
+- *Normalized* unicode text
+- Length-prefixed, not NUL-terminated (so length is constant-time)
+- Uses a Rope datastructure for efficient concatenation and slicing
+- Grapheme clusters are a *language construct,* not an afterthought
+- Fast random access
+
+```tomo
+>> "🤦🏼‍♂️".length
+= 1
+```
+
+[Note on string length](https://hsivonen.fi/string-length/)
 
 ---
 
@@ -992,3 +1039,14 @@ syntax.
 
 Maybe one day, Tomo will add macros, but not until I find
 something too painful to implement without macros.
+
+---
+
+# Future Features?
+
+- Exact rational numbers? (Nice for working with money)
+- Fixed-point numbers?
+- Matrices?
+- Built-in debugger?
+- Built-in profiler?
+- Better support for trees?
