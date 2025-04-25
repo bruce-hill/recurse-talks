@@ -48,16 +48,10 @@ but I think there's room for a new balance of those values.
 
 ---
 
-# Completely Made Up Graphs
+# In a Nutshell
 
-![](languages.png)
-
----
-
-# Summing It Up
-
-Basically, Tomo is in the same ballpark as Go or C#—it's fast and compiled and
-has type safety and automatic memory management, but I think there are a lot of
+Basically, Tomo is in the same ballpark as C# or Go—it's fast and compiled and
+has type safety and automatic memory management, but I think Tomo has a lot of
 improvements over Go and C#:
 
 - Safer
@@ -84,6 +78,55 @@ Not just compiler errors, but also runtime errors:
 ![](runtime-error.png)
 
 ---
+
+# Language Tour
+
+Let's go over some of the language's syntax and basic types.
+
+---
+
+# Control Flow
+
+Basic control flow you'd expect:
+
+```tomo
+for thing in things
+    do_thing(thing)
+
+# Also:
+for index, value in list
+    pass
+for key, value in table
+    pass
+
+if x < 10
+    say("x is small")
+else if x < 100
+    say("x is medium")
+else
+    say("x is big")
+
+repeat
+    do_thing()
+
+while condition != 0
+    other_thing()
+```
+
+Yes, Tomo also has named `break`/`continue` (`break x`,
+`continue repeat` etc)
+
+```tomo
+for x in xs
+    for y in ys
+        if x + y == 0
+            stop x
+```
+
+(`stop`/`skip` are the same as `break`/`continue`)
+
+---
+
 
 # Type Inference
 
@@ -114,10 +157,10 @@ func add(x,y:Int -> Int)
 
 # Primitive Types
 
-- `Bool` boolean (`yes` or `no`)
-- `Int` default integer type (overflows into bignum)
-- `Num` floating point number (64-bit)
-- `Text` AKA "string" in other languages
+- `Bool`: boolean (`yes` or `no`)
+- `Int`: default integer type (overflows into bignum)
+- `Num`: 64-bit floating point number
+- `Text`: AKA "string" in other languages
 
 Some more niche ones:
 
@@ -139,6 +182,7 @@ repeat
     say("i = $i")
     i *= 2
 ```
+(Demo: `tomo bigints.tm`)
 
 This means that integer overflow can impact _performance_,
 not _correctness_.
@@ -148,7 +192,8 @@ values don't use heap memory and operations are extremely
 fast, with only a single conditional branch to check for
 overflow.
 
-[What About the Integer Numbers?](https://www.microsoft.com/en-us/research/wp-content/uploads/2022/07/int.pdf)
+Based on the paper: [What About the Integer
+Numbers?](https://www.microsoft.com/en-us/research/wp-content/uploads/2022/07/int.pdf)
 _Fast Arithmetic with Tagged Integers – A Plea for Hardware Support_
 
 You can opt into fixed-width integers like `Int64` if you
@@ -550,39 +595,6 @@ same_nums := lotta_nums[]
 # Not copying:
 first_half := lotta_nums.to(lotta_nums.length/2)
 ```
-
----
-
-# Control Flow
-
-Basic control flow you'd expect:
-
-```tomo
-for thing in things
-    do_thing(thing)
-
-# Also:
-for index, value in list
-    pass
-for key, value in table
-    pass
-
-if x < 10
-    say("x is small")
-else if x < 100
-    say("x is medium")
-else
-    say("x is big")
-
-repeat
-    do_thing()
-
-while condition != 0
-    other_thing()
-```
-
-Yes, we also have named `break`/`continue` (`break x`,
-`continue repeat` etc)
 
 ---
 
