@@ -6,10 +6,12 @@ subtitle: The Language of Tomorrow
 
 # Whirlwind Overview
 
+Tomo is:
+
 - Statically typed
-- Imperative
-- Cross-compiles to C
-- Garbage Collection
+- Imperative (mostly)
+- Cross-compiled to C
+- Garbage collected
 
 ```tomo
 func sing_bottles(num_bottles:Int)
@@ -64,6 +66,35 @@ improvements over Go and C#:
 - More consistent semantics
 - Excellent Unicode support
 - Some neat built-in features
+
+---
+
+# Cross Compilation to C
+
+When you run `tomo myprogram.tm`, the compiler translates your Tomo code into
+efficient C code that uses the Tomo standard library.
+
+Then, it invokes a C compiler (tested to work with GCC, Clang, and TinyCC) to
+build an executable and then runs it.
+
+This code:
+
+```tomo
+func main()
+    say("Hello world")
+```
+
+Gets compiled into this C code:
+
+```c
+__attribute__ ((visibility ("default")))
+void _$hello$main() {
+    (void)say(Text("Hello world"), yes);
+}
+```
+
+Then, there's a bit of wrapper code to parse command line arguments (more on
+that later) and your main function gets called.
 
 ---
 
@@ -1050,3 +1081,20 @@ something too painful to implement without macros.
 - Built-in debugger?
 - Built-in profiler?
 - Better support for trees?
+
+---
+
+# Project Ideas
+
+Command line tools:
+
+- Print a file tree
+- Text-based game like hangman
+- Text-wrapping tool (e.g. `examples/wrap`)
+- Simple calculator
+
+General applications:
+
+- Make a website with `examples/http-server`
+- Make a game with Raylib (e.g. `examples/game`)
+- Make an SDL application
