@@ -29,6 +29,21 @@ func main(n=99)
 
 ---
 
+# Website
+
+While I'm going through this talk, feel free to check out the website:
+
+[tomo.bruce-hill.com](https://tomo.bruce-hill.com)
+
+And try running some code in the online sandbox:
+
+[sandbox.bruce-hill.com](https://sandbox.bruce-hill.com)
+
+(But be gentle, it's actually invoking the compiler on my webserver, not
+running locally in your browser)
+
+---
+
 # Backstory
 
 - Not my first language ([nomsu.org](nomsu.org))
