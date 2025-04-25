@@ -2,6 +2,7 @@
 title: Tomo
 author: Bruce Hill
 subtitle: The Language of Tomorrow
+thumbnail: tomo-logo.png
 ---
 
 # Whirlwind Overview
@@ -69,32 +70,19 @@ improvements over Go and C#:
 
 ---
 
-# Cross Compilation to C
+# Good Compiler Errors
 
-When you run `tomo myprogram.tm`, the compiler translates your Tomo code into
-efficient C code that uses the Tomo standard library.
+Tomo _cares_ about having useful error messages!
 
-Then, it invokes a C compiler (tested to work with GCC, Clang, and TinyCC) to
-build an executable and then runs it.
+![](type-error.png)
 
-This code:
+---
 
-```tomo
-func main()
-    say("Hello world")
-```
+# Good Runtime Errors
 
-Gets compiled into this C code:
+Not just compiler errors, but also runtime errors:
 
-```c
-__attribute__ ((visibility ("default")))
-void _$hello$main() {
-    (void)say(Text("Hello world"), yes);
-}
-```
-
-Then, there's a bit of wrapper code to parse command line arguments (more on
-that later) and your main function gets called.
+![](runtime-error.png)
 
 ---
 
@@ -949,6 +937,35 @@ make a simple mistake that leaks sensitive information.
 
 ---
 
+# Cross Compilation to C
+
+When you run `tomo myprogram.tm`, the compiler translates your Tomo code into
+efficient C code that uses the Tomo standard library.
+
+Then, it invokes a C compiler (tested to work with GCC, Clang, and TinyCC) to
+build an executable and then runs it.
+
+This code:
+
+```tomo
+func main()
+    say("Hello world")
+```
+
+Gets compiled into this C code:
+
+```c
+__attribute__ ((visibility ("default")))
+void _$hello$main() {
+    (void)say(Text("Hello world"), yes);
+}
+```
+
+Then, there's a bit of wrapper code to parse command line arguments (more on
+that later) and your main function gets called.
+
+---
+
 # C Interoperability
 
 Since Tomo cross-compiles to C, it's very easy for Tomo to
@@ -1086,14 +1103,14 @@ something too painful to implement without macros.
 
 # Project Ideas
 
-Command line tools:
+**Command line tools:**
 
 - Print a file tree
 - Text-based game like hangman
 - Text-wrapping tool (e.g. `examples/wrap`)
 - Simple calculator
 
-General applications:
+**General applications:**
 
 - Make a website with `examples/http-server`
 - Make a game with Raylib (e.g. `examples/game`)
