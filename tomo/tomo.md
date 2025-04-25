@@ -2,7 +2,6 @@
 title: Tomo
 author: Bruce Hill
 subtitle: The Language of Tomorrow
-thumbnail: tomo-logo.png
 ---
 
 # Whirlwind Overview
