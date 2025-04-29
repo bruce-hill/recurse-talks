@@ -1,0 +1,34 @@
+from: markdown+emoji+yaml_metadata_block+backtick_code_blocks+inline_code_attributes+tex_math_dollars
+
+standalone: true
+self-contained: false
+
+# Note that these take files, not their contents:
+resource-path: ["."]
+
+# auto, preserve, or none
+wrap: auto
+columns: 80
+
+title-prefix: "Tomo"
+metadata:
+    lang: "en"
+    root-url: "https://tomo.bruce-hill.com"
+
+highlight-style: pygments
+syntax-definitions:
+- .pandoc/peg.xml
+- .pandoc/tomo.xml
+- .pandoc/shell.xml
+
+email-obfuscation: javascript
+
+tab-stop: 4
+preserve-tabs: true
+
+html-q-tags: false
+
+filters:
+- .pandoc/stars.lua
+- .pandoc/external-links.lua
+- .pandoc/include-files.lua
