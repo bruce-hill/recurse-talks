@@ -1,16 +1,16 @@
 #!/bin/env slides
 
-# Awk
+# The Awk Talk
 
-_Another Bruce Hill Talk_
+_Bruce Hill_
+(RC Spring 1 2025)
 
 ---
 
 # What Is
 
-`awk` is a command line program,
-but also a programming language
-for doing stuff with streams of lines of text
+`awk` is a command line program, but also a programming
+language for doing stuff with streams of lines of text.
 
 ---
  
@@ -19,6 +19,13 @@ for doing stuff with streams of lines of text
 An awk program is a series of short programs
 with an optional condition, followed by an 
 optional action.
+
+```
+program <- statement+
+statement <- condition action / condition / action
+condition <- "/"regex"/" / expression
+action <- "{" code "}" 
+```
 
 ---
 
@@ -44,10 +51,11 @@ One of the most common things to do is print different
 _fields_ from a line. This can be done with `$1`, `$2`, etc.
 (`$0` is the whole line).
 
-Here's printing the third field (owner) from `ls -l` output:
+For example, if you wanted to see a list of the owners of
+all the files in `/tmp` you could do:
 
 ```bash
-ls -l / | awk '/var/ {print $3}'
+ls -l /tmp | awk '{print $3}'
 ```
 
 ---
@@ -97,10 +105,21 @@ awk '/foo/{count+=1} END{print count}'
 
 # Associative Arrays
 
+These are basically a one-stop-shop for arrays and dicts.
+
 You can also use associative arrays without initializing:
 
-```
-awk '{counts[$0]+=1} END {for(x in counts) print x,counts[x]}'
+```demo
+tr ' ' '\n' < raven.txt | \
+awk '
+/./{count[$0]+=1}
+END{
+  asorti(count);
+  for(w in count)
+    print count[w], w
+}' | head -10
+
+ask
 ```
 
 ---
