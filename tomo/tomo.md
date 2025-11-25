@@ -1,16 +1,11 @@
----
-title: Tomo
-author: Bruce Hill
-subtitle: The Language of Tomorrow
----
-
+#!/usr/sbin/python3 /home/bruce/software/slides/slides.py
 # Whirlwind Overview
 
 Tomo is:
 
 - Statically typed
 - Imperative (mostly)
-- Cross-compiled to C
+- Transpiles to C
 - Garbage collected
 
 ```tomo
@@ -35,13 +30,6 @@ While I'm going through this talk, feel free to check out the website:
 
 [tomo.bruce-hill.com](https://tomo.bruce-hill.com)
 
-And try running some code in the online sandbox:
-
-[sandbox.bruce-hill.com](https://sandbox.bruce-hill.com)
-
-(But be gentle, it's actually invoking the compiler on my webserver, not
-running locally in your browser)
-
 ---
 
 # Backstory
@@ -65,7 +53,7 @@ but I think there's room for a new balance of those values.
 
 # In a Nutshell
 
-Basically, Tomo is in the same ballpark as C# or Go—it's fast and compiled and
+Basically, Tomo is in the same ballpark as C# or Go: it's fast and compiled and
 has type safety and automatic memory management, but I think Tomo has a lot of
 improvements over Go and C#:
 
@@ -82,7 +70,7 @@ improvements over Go and C#:
 
 Tomo _cares_ about having useful error messages!
 
-![](type-error.png)
+![sxiv -sf](type-error.png)
 
 ---
 
@@ -90,7 +78,7 @@ Tomo _cares_ about having useful error messages!
 
 Not just compiler errors, but also runtime errors:
 
-![](runtime-error.png)
+![sxiv -sf](runtime-error.png)
 
 ---
 
@@ -135,10 +123,8 @@ Yes, Tomo also has named `break`/`continue` (`break x`,
 for x in xs
     for y in ys
         if x + y == 0
-            stop x
+            break x
 ```
-
-(`stop`/`skip` are the same as `break`/`continue`)
 
 ---
 
@@ -207,9 +193,8 @@ values don't use heap memory and operations are extremely
 fast, with only a single conditional branch to check for
 overflow.
 
-Based on the paper: [What About the Integer
-Numbers?](https://www.microsoft.com/en-us/research/wp-content/uploads/2022/07/int.pdf)
-_Fast Arithmetic with Tagged Integers – A Plea for Hardware Support_
+Based on the paper: [What About the Integer Numbers?
+_Fast Arithmetic with Tagged Integers – A Plea for Hardware Support_](https://www.microsoft.com/en-us/research/wp-content/uploads/2022/07/int.pdf)
 
 You can opt into fixed-width integers like `Int64` if you
 need the performance, but the default is _correct_ and very
@@ -219,10 +204,9 @@ fast for most cases.
 
 # Text
 
-Tomo's built-in `Text` datatype solves some of the problems that other
-languages have with strings. I chose to call it `Text` instead of `String` to
-reflect the fact that these aren't your grandparents' "array of NUL-terminated
-ASCII bytes" (also, "text" is shorter and more vernacular than "string")
+Tomo's built-in `Text` datatype solves some of the problems that strings have
+in other. I chose to call it `Text` instead of `String` to reflect the fact
+that these aren't your grandparents' "array of NUL-terminated ASCII bytes".
 
 Tomo Texts:
 
@@ -233,8 +217,7 @@ Tomo Texts:
 - Fast random access
 
 ```tomo
->> "🤦🏼‍♂️".length
-= 1
+assert "🤦🏼‍♂️".length == 1
 ```
 
 [Note on string length](https://hsivonen.fi/string-length/)
@@ -250,9 +233,11 @@ nums := [10, 20, 30]
 ## 1-Indexed
 
 ```tomo
->> nums[2]
-= 20
+assert nums[2] == 20
 ```
+
+Don't @ me. For some reason this is the most controversial
+thing in the entire language.
 
 ---
 
@@ -261,24 +246,11 @@ nums := [10, 20, 30]
 Hash tables for O(1) lookups.
 
 ```tomo
-scores := {"Alice"=10, "Bob"=5}
->> scores["Alice"]!
-= 10
+scores := {"Alice": 10, "Bob": 5}
+assert scores["Alice"] == 10
 ```
 
 _Tables work on all types!_
-
----
-
-# Sets
-
-Like hash tables, but without values, only keys:
-
-```tomo
-nums := |1, 2, 3|
->> nums.overlap(|2, 3, 4|)
-= |2, 3|
-```
 
 ---
 
@@ -289,57 +261,28 @@ Tables also have two extra tricks:
 ## Fallback Tables
 
 ```tomo
-table1 := {"Alice"=10}
-table2 := {"Bob"=5; fallback=table1}
->> table2["Alice"]!
-= 10
+table1 := {"Alice": 10}
+table2 := {"Bob": 5; fallback=table1}
+assert table2["Alice"] == 10
 ```
 
 ## Default Values
 
 ```tomo
-scores := {"Alice"=10; default=0}
->> scores["Carol"]
-= 0
-```
-
----
-
-# Side Note: Empty Collections
-
-Sadly, type inference can't read your mind when you create
-an empty list, table, or set. So, you need to give it an
-explicit type when declaring a variable:
-
-```tomo
-no_nums : [Int] = []
-```
-
-However, explicit types are not needed when reassigning a
-variable, passing an argument, or giving a return value:
-
-```tomo
-func do_thing(nums:[Int] -> [Int])
-    if nums.length > 10
-        # No explicit type needed:
-        return []
-    return nums
-
-# No explicit type needed:
-do_thing([])
+scores := {"Alice": 10; default=0}
+assert scores["Carol"] == 0
 ```
 
 ---
 
 # Comprehensions
 
-For convenience, Lists, Tables, and Sets have comprehensions
+For convenience, Lists and Tables have comprehensions
 similar to Python's:
 
 ```tomo
 primes := [i for i in 100 if i.is_prime()]
-scores := {name=random.int(1,10) for name in names}
-words := |w.lower() for w in text.split(" ")|
+scores := {name: random.int(1,10) for name in names}
 ```
 
 Comprehensions can also be mixed and matched with explicit
@@ -355,7 +298,7 @@ both_things := [x for x in xs, y for y in ys]
 
 # Optional Types
 
-In Tomo, any type can be optional, which means it either has
+In Tomo, every type can be optional, which means it either has
 a value or is `none`.
 
 ```tomo
@@ -366,11 +309,9 @@ nickname = "Bubsy"
 **Example:** parsing an integer:
 
 ```tomo
->> Int.parse("123")
-= 123?
+assert Int.parse("123") == 123
 
->> Int.parse("asdf")
-= none
+assert Int.parse("asdf") == none
 ```
 
 The type system enforces that optional values can't be used
@@ -382,35 +323,25 @@ func add(x:Int, y:Int -> Int)
 
 parsed := Int.parse(some_text)
 # Type error:
->> add(parsed, 1)
+_ := add(parsed, 1)
 ```
 
 ---
 
 # Using Optionals
 
-The postfix `?` operator converts a non-optional value into
-an optional value.
-
-```tomo
->> nickname
-= "Bubsy"?
-```
-
 The postfix `!` operator converts an optional value into a
 non-optional value or errors if it was `none`
 
 ```tomo
->> nickname!
-= "Bubsy"
+assert nickname! == "Bubsy"
 ```
 
 You can also use `or` to give a fallback:
 
 ```tomo
-nickname = none
->> nickname or "nah"
-= "nah"
+nickname : Text? = none
+assert (nickname or "nah") == "nah"
 ```
 
 ---
@@ -422,15 +353,12 @@ value is _optional_ because the key might not be in the
 table:
 
 ```tomo
-scores := {"Alice"=10}
->> scores["Alice"]
-= 10?
+scores := {"Alice": 10}
+assert scores["Alice"] == 10
 
->> scores["Xander"]
-= none
+assert scores["Xander"] == none
 
->> scores["Xander"] or 0
-= 0
+assert (scores["Xander"] or 0) == 0
 ```
 
 ---
@@ -447,8 +375,7 @@ struct LogEntry(username:Text, action:Text, when:Time = Time.now())
 
 entry := LogEntry("Bruce", "gave presentation")
 sleep(1)
->> entry.happened_after(Time.now())
-= no
+assert entry.happened_after(now()) == no
 ```
 
 Structs can also have methods that let you define
@@ -464,9 +391,7 @@ You can also define namespaced functions or constants.
 enum FooResult(Failure(reason:Text), Success(result:Int))
 ```
 
----
-
-# Pattern Matching
+## Pattern Matching
 
 ```tomo
 when run_program() is Failure(reason)
@@ -483,7 +408,8 @@ is Success(x)
 
 # Smart Inference
 
-No `FooResult.` prefix in most cases:
+You don't need to type `FooResult.` when it's obvious from
+the context (e.g. a `return` statement in a typed function):
 
 ```tomo
 func run_program(-> FooResult)
@@ -503,7 +429,7 @@ File paths are a native type with built-in literal syntax:
 config_file := (~/.config/myconfig.txt)
 
 for line in config_file.by_line()!
-    ...
+    say(line)
 
 config_file.append("New text\n")
 ```
@@ -533,8 +459,7 @@ they point to the same memory.
 pointer1 := @[10, 20]
 pointer2 := @[10, 20]
 
->> pointer1 == pointer2
-= no
+assert pointer1 != pointer2
 ```
 
 For things that are not pointers (e.g. Lists or Tables),
@@ -544,6 +469,7 @@ same contents):
 ```tomo
 list1 := [10, 20]
 list2 := [10, 20]
+assert list1 == list2
 ```
 
 ---
@@ -568,8 +494,7 @@ In order to mutate data, you need to use pointers:
 ```tomo
 nums := @[10, 20]
 nums.append(30)
->> nums
-= @[10, 20, 30]
+assert nums[] == [10, 20, 30]
 ```
 
 ---
@@ -585,12 +510,10 @@ nums := @[10, 20]
 other := @[10, 20]
 
 # Are these the same pointer?
->> nums == other
-= no
+assert nums != other
 
 # Do these have the same contents?
->> nums[] == other[]
-= yes
+assert nums[] == other[]
 ```
 
 ---
@@ -625,10 +548,8 @@ def filled_int_array(count:Int, value=0 -> [Int])
 Default arguments and keyword arguments are supported:
 
 ```tomo
->> filled_int_array(3)
-= [0, 0, 0]
->> filled_int_array(value=99, count=3)
-= [99, 99, 99]
+assert filled_int_array(3) == [0, 0, 0]
+assert filled_int_array(value=99, count=3) == [99, 99, 99]
 ```
 
 ---
@@ -655,8 +576,7 @@ Lambdas (anonymous functions) are also supported:
 ```tomo
 n := 1
 adder := func(x:Int) x + n
->> adder(5)
-= 6
+assert adder(5) == 6
 ```
 
 Return types can be inferred for lambdas, so only argument
@@ -830,8 +750,7 @@ thing := MyThing(12345, "Some text")
 (./thing.dat).write_bytes(thing.serialized())
 
 roundtrip := deserialize((./thing.dat).read_bytes()! -> MyThing)
->> roundtrip == thing
-= yes
+assert roundtrip == thing
 ```
 
 Serialization works for (almost) all built-in types,
@@ -926,8 +845,7 @@ username := "<script>alert('pwned!')</script>"
 element := $HTML"
     <span>$username</span>
 "
->> element
-= '<span>&lt;script&gt;alert(&#39;pwned!&#39;)&lt;/script&gt;</span>'
+assert element == '<span>&lt;script&gt;alert(&#39;pwned!&#39;)&lt;/script&gt;</span>'
 ```
 
 ---
@@ -941,8 +859,7 @@ struct Password(text:Text; secret)
         ...
 
 password := Password("sw0rdf1sh")
->> "Your password is $password"
-= "Your password is Password(...)"
+assert "Your password is $password" == "Your password is Password(...)"
 
 if password.hash() == database.get_password_hash(username)
     do_login(username)
