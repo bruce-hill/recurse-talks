@@ -60,9 +60,9 @@ Malfunctioning AIs made by evil corporations
 # What I Am Covering
 
 - Linux sandboxing with seccomp
-- System Virtual Machines
+- Docker
 - Mac sandboxing with Seatbelt
-- OpenBSD sandboxing with `pledge()`/`unveil()`
+- System Virtual Machines
 - Process Virtual Machines
 
 -------------------------------
